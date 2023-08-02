@@ -31,7 +31,7 @@ def step1():
 def step2():
     output = ""
 
-    all_files = [str(p) for p in Path("exports").iterdir() if "annots" not in str(p)]
+    all_files = [str(p) for p in Path("exports").iterdir() if "_annots.md" not in str(p) and "_info.md" not in str(p)]
     all_files.remove("exports/list.txt")
     all_files = sorted(all_files)
 
@@ -39,6 +39,16 @@ def step2():
     for path in tqdm(all_files):
         content = Path(path).read_text()
         entry_id = re.search(r"exports/(\d*)", path)[0].replace("exports/", "")
+
+        infos = Path(f"exports/{entry_id}_info.md").read_text().split("\n")
+        dict_infos = {
+                line.split(":", 1)[0]: line.split(":", 1)[1].strip()
+                for line in infos
+                if ":" in line
+                }
+        if "Annotations" not in dict_infos:
+            dict_infos["Annotations"] = 0
+        print(dict_infos["Url"])
 
         annots = Path(f"exports/{entry_id}_annots.md").read_text().split("\n")
         for i, an in enumerate(annots):
@@ -79,6 +89,12 @@ def step2():
 
         output += f"\n- TODO {header}"
         output += "\n    diy_type:: wallabag_import"
+        output += f"\n    reading_time:: {dict_infos['Reading time']}"
+        output += f"\n    url:: {dict_infos['Url']}"
+        output += f"\n    wallabag_title:: {dict_infos['Title']}"
+        output += f"\n    wallabag_n_annotations:: {dict_infos['Annotations']}"
+        output += f"\n    wallabag_is_read:: {dict_infos['Is read']}"
+        output += f"\n    wallabag_is_starred:: {dict_infos['Is starred']}"
 
         for ll in lines[1:]:
             if not ll.strip():
