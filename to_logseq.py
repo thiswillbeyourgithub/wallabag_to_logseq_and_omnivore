@@ -41,6 +41,15 @@ def step3():
 
         os.system(f"wallabag info {entry_id} | grep Url | cut -c6- >> exports/unreads/urls.txt")
 
+def step4():
+    urls = Path("exports/unreads/urls.txt").read_text().split("\n")
+    with open("exports/unreads/url.csv", "w") as f:
+        f.write("URL,status,labels\n")
+        for url in tqdm(urls):
+            url = url.strip()
+            if not url:
+                continue
+            f.write(f"{url},SUCCEDED,[wallabag_import]\n")
 
 def step2():
     output = "- # Wallabag Imports"
@@ -140,5 +149,6 @@ def step2():
 if __name__ == "__main__":
     #step1()
     #step2()
-    step3()
+    #step3()
+    step4()
     # todo : get url and tags
