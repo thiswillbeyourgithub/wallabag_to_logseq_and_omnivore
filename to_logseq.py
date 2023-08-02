@@ -153,7 +153,7 @@ def step4():
     """
     urls = Path("exports/unreads/urls.txt").read_text().split("\n")
     with open("exports/unreads/urls.csv", "w") as f:
-        f.write("URL,status,labels\n")
+        # f.write("URL,status,labels\n")  # not necessary
         for url in tqdm(urls):
             url = url.strip()
             if not url:
