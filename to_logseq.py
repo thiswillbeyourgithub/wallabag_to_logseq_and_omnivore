@@ -28,6 +28,7 @@ def step1():
 def step3():
     # get all entry id
     Path("exports/unreads").mkdir(exist_ok=True)
+    os.system("rm exports/unreads/urls.txt")
     os.system("wallabag list --unread | cut -c-8 > exports/unreads/unread_list.txt")
     with open("exports/unreads/unread_list.txt", "r") as f:
         list_content = f.read().split("\n")
