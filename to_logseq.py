@@ -67,7 +67,7 @@ def step2():
                 print(annots[i])
 
             if an in content:
-                content = content.replace(an, f"=={an}==")
+                content = content.replace(an, f" =={an}== ")
             else:
                 offset = 0
                 for offset in range(0, len(an)):
@@ -78,7 +78,7 @@ def step2():
                     if cnt == list(range(len(an)))[-1]:
                         # it was never found, trying with a bigger offset
                         continue
-                    content = content.replace(an[offset:cnt], f"=={an[offset:cnt]}==")
+                    content = content.replace(an[offset:cnt], f" =={an[offset:cnt]}== ")
                     break
 
             annots[i] = an
