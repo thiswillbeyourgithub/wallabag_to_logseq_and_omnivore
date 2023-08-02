@@ -8,6 +8,9 @@ import pandas as pd
 import os
 
 def step1():
+    """
+    export all read entry id, with annotation and content
+    """
     # get all entry id
     os.system("wallabag list --read | cut -c-8 > exports/read_list.txt")
     with open("exports/read_list.txt", "r") as f:
@@ -26,6 +29,9 @@ def step1():
         os.system(f"wallabag info {entry_id} > exports/{entry_id}_info.md")
 
 def step3():
+    """
+    get the list of id of unread urls
+    """
     # get all entry id
     Path("exports/unreads").mkdir(exist_ok=True)
     os.system("rm exports/unreads/urls.txt")
@@ -42,6 +48,9 @@ def step3():
         os.system(f"wallabag info {entry_id} | grep Url | cut -c6- >> exports/unreads/urls.txt")
 
 def step4():
+    """
+    read the unread urls from step3 then create a csv to upload to omnivore via its API
+    """
     urls = Path("exports/unreads/urls.txt").read_text().split("\n")
     with open("exports/unreads/urls.csv", "w") as f:
         f.write("URL,status,labels\n")
@@ -51,11 +60,15 @@ def step4():
                 continue
             f.write(f"{url},SUCCEDED,[wallabag_import]\n")
 
+    # upload to omnivore
     api_key = "redacted"
     os.system('curl -X POST -H "Authorization: ' + api_key + ' -H "Content-Type: application/json" -d \'{"query":"mutation UploadImportFile($type: UploadImportFileType!, $contentType: String!) { uploadImportFile(type: $type, contentType: $contentType) { ... on UploadImportFileError { errorCodes } ... on UploadImportFileSuccess { uploadSignedUrl } } }","variables":{"type":"URL_LIST","contentType":"text/csv"}}\' "https://api-prod.omnivore.app/api/graphql/api/graphql" | jq -r \'.data.uploadImportFile.uploadSignedUrl\' | \xargs curl -X PUT -H "Content-Type: text/csv" --data-binary "@exports/unreads/url.csv')
 
 
 def step2():
+    """
+    convert the output from step1 into a markdown logseq file
+    """
     output = "- # Wallabag Imports"
 
     all_files = [str(p) for p in Path("exports").iterdir() if "_annots.md" not in str(p) and "_info.md" not in str(p)]
@@ -155,7 +168,7 @@ def step2():
 
 if __name__ == "__main__":
     #step1()
-    #step2()
+    step2()
     #step3()
-    step4()
+    #step4()
     # todo : get url and tags
