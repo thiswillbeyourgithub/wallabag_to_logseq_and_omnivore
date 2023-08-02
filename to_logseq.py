@@ -114,6 +114,7 @@ def step2():
             header = header[2:]
 
         output += f"\n  - ## TODO {header}"
+        output += f"\n    collapsed:: true"
         output += f"\n    diy_type:: wallabag_import"
         output += f"\n    reading_time:: {dict_infos['Reading time']}"
         output += f"\n    url:: {dict_infos['Url']}"
