@@ -103,10 +103,12 @@ def step2():
                 continue
             output += f"\n    - {ll}"
 
+        if annots:
+            output += "\n  - ### Highlights"
         for an in annots:
             if an.strip():
-                output += f"\n   - TODO =={an}=="
-                output += f"\n     diy_type:: wallabag_annotation"
+                output += f"\n      - TODO =={an}=="
+                output += f"\n        diy_type:: wallabag_annotation"
 
 
 
