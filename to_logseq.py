@@ -1,3 +1,4 @@
+import sys
 import re
 import time
 from pathlib import Path
@@ -76,7 +77,7 @@ def step2():
         lines = [ll for ll in lines if ll.strip() != ""]
         header = lines[0]
 
-        output += f"\n- {header}"
+        output += f"\n- TODO {header}"
         output += "\n    diy_type:: wallabag_import"
 
         for ll in lines[1:]:
@@ -93,8 +94,13 @@ def step2():
 
 
 
-    with open("./output.md", "w") as f:
-        f.write(output)
+    if sys.argv[1:] == []:
+        with open("./output.md", "w") as f:
+            f.write(output)
+    else:
+        with open(sys.argv[1:][0], "w") as f:
+            f.write(output)
+
 
 if __name__ == "__main__":
     #step1()
