@@ -165,8 +165,7 @@ def step4():
     os.system('curl -X POST -H "Authorization: ' + api_key + ' -H "Content-Type: application/json" -d \'{"query":"mutation UploadImportFile($type: UploadImportFileType!, $contentType: String!) { uploadImportFile(type: $type, contentType: $contentType) { ... on UploadImportFileError { errorCodes } ... on UploadImportFileSuccess { uploadSignedUrl } } }","variables":{"type":"URL_LIST","contentType":"text/csv"}}\' "https://api-prod.omnivore.app/api/graphql/api/graphql" | jq -r \'.data.uploadImportFile.uploadSignedUrl\' | \xargs curl -X PUT -H "Content-Type: text/csv" --data-binary "@exports/unreads/url.csv')
 
 if __name__ == "__main__":
-    #step1()
+    step1()
     step2()
-    #step3()
-    #step4()
-    # todo : get url and tags
+    step3()
+    step4()
