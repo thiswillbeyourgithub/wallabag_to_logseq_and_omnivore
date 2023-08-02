@@ -29,7 +29,7 @@ def step1():
 
 
 def step2():
-    output = ""
+    output = "- # Wallabag Imports"
 
     all_files = [str(p) for p in Path("exports").iterdir() if "_annots.md" not in str(p) and "_info.md" not in str(p)]
     all_files.remove("exports/list.txt")
@@ -86,9 +86,11 @@ def step2():
         lines = content.split("\n")
         lines = [ll for ll in lines if ll.strip() != ""]
         header = lines[0]
+        if header.startswith("# "):
+            header = header[2:]
 
-        output += f"\n- TODO {header}"
-        output += "\n    diy_type:: wallabag_import"
+        output += f"\n  - ## TODO {header}"
+        output += f"\n    diy_type:: wallabag_import"
         output += f"\n    reading_time:: {dict_infos['Reading time']}"
         output += f"\n    url:: {dict_infos['Url']}"
         output += f"\n    wallabag_title:: {dict_infos['Title']}"
@@ -104,11 +106,11 @@ def step2():
             output += f"\n    - {ll}"
 
         if annots:
-            output += "\n  - ### Highlights"
+            output += "\n    - ### Highlights"
         for an in annots:
             if an.strip():
-                output += f"\n      - TODO =={an}=="
-                output += f"\n        diy_type:: wallabag_annotation"
+                output += f"\n        - TODO =={an}=="
+                output += f"\n          diy_type:: wallabag_annotation"
 
 
 
