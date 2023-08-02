@@ -20,10 +20,10 @@ def step1():
     for entry_id in tqdm(list_content):
         print(entry_id)
         os.system(f"wallabag export {entry_id} -o exports -f MARKDOWN")
-        time.sleep(1)
 
         os.system(f"wallabag anno -c list -e {entry_id} > exports/{entry_id}_annots.md")
-        time.sleep(1)
+
+        os.system(f"wallabag info {entry_id} > exports/{entry_id}_info.md")
     os.system("cp list.txt exports/list.txt")
 
 
