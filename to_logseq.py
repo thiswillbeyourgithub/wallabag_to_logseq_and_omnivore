@@ -24,22 +24,21 @@ def step1():
         os.system(f"wallabag anno -c list -e {entry_id} > exports/{entry_id}_annots.md")
 
         os.system(f"wallabag info {entry_id} > exports/{entry_id}_info.md")
-    os.system("cp read_list.txt exports/read_list.txt")
-    with open("list.txt", "r") as f:
+
+def step3():
+    # get all entry id
+    Path("exports/unreads").mkdir(exist_ok=True)
+    os.system("wallabag list --unread | cut -c-8 > exports/unreads/unread_list.txt")
+    with open("exports/unreads/unread_list.txt", "r") as f:
         list_content = f.read().split("\n")
     list_content = [ll for ll in list_content if ll.isdigit()]
 
-    # export the content and annotations
-    Path("exports").mkdir(exist_ok=True)
+    # export the info to get the url
 
     for entry_id in tqdm(list_content):
         print(entry_id)
-        os.system(f"wallabag export {entry_id} -o exports -f MARKDOWN")
 
-        os.system(f"wallabag anno -c list -e {entry_id} > exports/{entry_id}_annots.md")
-
-        os.system(f"wallabag info {entry_id} > exports/{entry_id}_info.md")
-    os.system("cp list.txt exports/list.txt")
+        os.system(f"wallabag info {entry_id} | grep Url | cut -c6- >> exports/unreads/urls.txt")
 
 
 def step2():
@@ -139,5 +138,6 @@ def step2():
 
 if __name__ == "__main__":
     #step1()
-    step2()
+    #step2()
+    step3()
     # todo : get url and tags
