@@ -9,8 +9,8 @@ import os
 
 def step1():
     # get all entry id
-    os.system("wallabag list --read | cut -c-8 > read_list.txt")
-    with open("read_list.txt", "r") as f:
+    os.system("wallabag list --read | cut -c-8 > exports/read_list.txt")
+    with open("exports/read_list.txt", "r") as f:
         list_content = f.read().split("\n")
     list_content = [ll for ll in list_content if ll.isdigit()]
 
