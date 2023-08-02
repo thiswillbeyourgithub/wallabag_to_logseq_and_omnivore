@@ -9,7 +9,22 @@ import os
 
 def step1():
     # get all entry id
-    os.system("wallabag list --read | cut -c-8 > list.txt")
+    os.system("wallabag list --read | cut -c-8 > read_list.txt")
+    with open("read_list.txt", "r") as f:
+        list_content = f.read().split("\n")
+    list_content = [ll for ll in list_content if ll.isdigit()]
+
+    # export the content and annotations
+    Path("exports").mkdir(exist_ok=True)
+
+    for entry_id in tqdm(list_content):
+        print(entry_id)
+        os.system(f"wallabag export {entry_id} -o exports -f MARKDOWN")
+
+        os.system(f"wallabag anno -c list -e {entry_id} > exports/{entry_id}_annots.md")
+
+        os.system(f"wallabag info {entry_id} > exports/{entry_id}_info.md")
+    os.system("cp read_list.txt exports/read_list.txt")
     with open("list.txt", "r") as f:
         list_content = f.read().split("\n")
     list_content = [ll for ll in list_content if ll.isdigit()]
@@ -27,12 +42,11 @@ def step1():
     os.system("cp list.txt exports/list.txt")
 
 
-
 def step2():
     output = "- # Wallabag Imports"
 
     all_files = [str(p) for p in Path("exports").iterdir() if "_annots.md" not in str(p) and "_info.md" not in str(p)]
-    all_files.remove("exports/list.txt")
+    all_files.remove("exports/read_list.txt")
     all_files = sorted(all_files)
 
 
