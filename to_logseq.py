@@ -51,6 +51,10 @@ def step4():
                 continue
             f.write(f"{url},SUCCEDED,[wallabag_import]\n")
 
+    api_key = "redacted"
+    os.system('curl -X POST -H "Authorization: ' + api_key + ' -H "Content-Type: application/json" -d \'{"query":"mutation UploadImportFile($type: UploadImportFileType!, $contentType: String!) { uploadImportFile(type: $type, contentType: $contentType) { ... on UploadImportFileError { errorCodes } ... on UploadImportFileSuccess { uploadSignedUrl } } }","variables":{"type":"URL_LIST","contentType":"text/csv"}}\' "https://api-prod.omnivore.app/api/graphql/api/graphql" | jq -r \'.data.uploadImportFile.uploadSignedUrl\' | \xargs curl -X PUT -H "Content-Type: text/csv" --data-binary "@exports/unreads/url.csv')
+
+
 def step2():
     output = "- # Wallabag Imports"
 
