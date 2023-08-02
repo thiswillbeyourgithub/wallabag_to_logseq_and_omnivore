@@ -60,6 +60,8 @@ def step2():
 
 
     for path in tqdm(all_files):
+        if path.startswith("exports/unreads"):
+            continue
         content = Path(path).read_text()
         entry_id = re.search(r"exports/(\d*)", path)[0].replace("exports/", "")
 
